@@ -1,0 +1,193 @@
+body {
+  background: #fff;
+  color: #222;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 2rem;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.bills-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(0, 188, 212, 0.12);
+  padding: 2rem 2.5rem;
+  color: #222;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.bills-container h3 {
+  color: #1976d2;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.bills-container table {
+  width: 100%;
+  min-width: 350px;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+  flex: 1;
+  display: block;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: calc(80vh - 120px);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.bills-container table thead,
+.bills-container table tbody {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+.bills-container table thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.bills-container thead {
+  background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+  color: #fff;
+}
+
+.bills-container th,
+.bills-container td {
+  border-bottom: 2px solid #1976d2;
+  padding: 8px;
+  text-align: center;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Set specific column widths */
+.bills-container th:nth-child(1),
+.bills-container td:nth-child(1) {
+  align-items: center;
+  justify-content: center;
+  width: 5%; /* Order ID */
+}
+
+.bills-container th:nth-child(2),
+.bills-container td:nth-child(2) {
+  width: 25%; /* Customer Name & Email */
+  text-align: center;
+  padding-left: 12px;
+}
+
+.bills-container th:nth-child(3),
+.bills-container td:nth-child(3) {
+  width: 35%; /* Items */
+  text-align: center;
+  padding-left: 12px;
+}
+
+.bills-container th:nth-child(4),
+.bills-container td:nth-child(4) {
+  width: 12%; /* Total */
+}
+
+.bills-container th:nth-child(5),
+.bills-container td:nth-child(5) {
+  width: 13%; /* Invoice Button */
+}
+
+.bills-container tbody tr:hover {
+  background: rgba(25, 118, 210, 0.08);
+}
+
+.bills-container button {
+  padding: 0.5rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.27);
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  margin: 0 auto;
+  display: block;
+}
+
+.bills-container button:hover {
+  background: linear-gradient(90deg, #333 0%, #1976d2 100%);
+  box-shadow: 0 4px 24px rgba(0, 188, 212, 0.53);
+  transform: translateY(-2px) scale(1.03);
+}
+
+/* Hide scrollbars while maintaining scroll functionality */
+.bills-container table::-webkit-scrollbar {
+  display: none;
+}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pending {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeaa7;
+}
+
+.status-completed {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+/* Email styling */
+.bills-container td small {
+  display: block;
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  word-break: break-all;
+  line-height: 1.2;
+}
+
+.status-delivered {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.status-cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Customer info styling */
+.bills-container td small {
+  color: #666;
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 0.2rem;
+}
+
+/* Ensure the title doesn't get cut off */
+.bills-container h3 {
+  flex-shrink: 0;
+}

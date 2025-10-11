@@ -1,0 +1,133 @@
+.main-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  width: 100vw;
+  min-height: 100vh;
+  margin-left: 230px;
+  box-sizing: border-box;
+}
+
+.orders-list-container,
+.reservations-list-container {
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 32px 28px 28px 28px;
+  max-width: 700px;
+  min-width: 350px;
+  width: 100%;
+  min-height: 600px;
+  height: 100%;
+  margin: 0 0 32px 0;
+  transition: box-shadow 0.3s;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+}
+
+.orders-list-container:hover,
+.reservations-list-container:hover {
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.22);
+}
+
+.orders-list-container h1,
+.reservations-list-container h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2d3748;
+  letter-spacing: 0.02em;
+  padding: 16px;
+}
+
+.table-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.orders-list-container table,
+.reservations-list-container table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.orders-list-container th,
+.orders-list-container td,
+.reservations-list-container th,
+.reservations-list-container td {
+  padding: 14px 16px;
+  text-align: left;
+  word-break: break-word;
+}
+
+.orders-list-container th,
+.reservations-list-container th {
+  background: rgba(79, 140, 255, 0.6);
+  font-weight: 700;
+  color: #2d3748;
+  border-bottom: 2px solid #e0e7ff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+}
+
+.orders-list-container tr,
+.reservations-list-container tr {
+  border-bottom: 1px solid #e0e7ff;
+  transition: background 0.2s;
+}
+
+.orders-list-container tr:hover,
+.reservations-list-container tr:hover {
+  background: #f0f6ff;
+}
+
+.status-badge {
+  display: inline-block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 50px;
+  padding: 3px 12px;
+  min-width: 80px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* Order Status Styles */
+.status-pending {
+  background: linear-gradient(90deg, #fff700 0%, #ffe066 100%);
+  color: #333;
+}
+
+.status-completed {
+  background: linear-gradient(90deg, #38ef7d 0%, #11998e 100%);
+  color: #fff;
+}
+
+.status-canceled {
+  background: linear-gradient(90deg, #ff5858 0%, #f85757 100%);
+  color: #fff;
+}
+
+.status-processing {
+  background: linear-gradient(90deg, #4f8cff 0%, #38b2ac 100%);
+  color: #fff;
+}
+
+.status-onhold {
+  background: linear-gradient(90deg, #f7971e 0%, #ffd200 100%);
+  color: #fff;
+}

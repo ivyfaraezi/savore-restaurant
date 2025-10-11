@@ -1,0 +1,273 @@
+body {
+  background: #fff;
+  color: #222;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 2rem;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.page-flex {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: 80vh;
+}
+
+.make-orders-flex {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: flex-start;
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: 80vh;
+  overflow: visible;
+}
+
+.make-orders-container,
+.table-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 500px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(0, 188, 212, 0.12);
+}
+
+.make-orders-container {
+  max-width: 500px;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  overflow: visible;
+  margin-top: 4rem;
+}
+
+.make-orders-cart {
+  flex: 1 1 0;
+  min-width: 350px;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(0, 188, 212, 0.12);
+  padding: 2rem 2.5rem;
+  color: #222;
+  overflow: visible;
+  margin-top: 4rem;
+}
+
+h2,
+.make-orders-cart h3 {
+  color: #1976d2;
+  font-size: 2.2rem;
+  text-align: center;
+}
+
+.make-orders-cart h3 {
+  margin-bottom: 1.2rem;
+}
+
+.make-orders-container label,
+.special-requests label {
+  display: block;
+  font-weight: 600;
+  color: #333;
+}
+
+.make-orders-container label:first-of-type {
+  margin-top: 0;
+}
+
+.make-orders-container input,
+.make-orders-container textarea,
+.make-orders-container select {
+  width: 100%;
+  max-width: none;
+  padding: 0.7rem 1rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0;
+  border-radius: 8px;
+  border: 1px solid #1976d2;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 1rem;
+  color: #333;
+  box-shadow: 0 1px 8px rgba(0, 188, 212, 0.08);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.make-orders-container input:focus,
+.make-orders-container textarea:focus {
+  border-color: #1976d2;
+  outline: none;
+}
+
+.make-orders-container .button-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 0;
+}
+
+.make-orders-container button {
+  margin-top: 0;
+  width: 48%;
+  padding: 0.5rem 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.27);
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  display: inline-block;
+  margin-right: 2%;
+}
+
+.make-orders-container button#addToCart {
+  display: block;
+  margin: 0 auto;
+}
+
+#submitOrderBtn {
+  display: block;
+  margin: 2rem auto 0 auto;
+  width: 80%;
+}
+
+.make-orders-container button:hover {
+  background: linear-gradient(90deg, #333 0%, #1976d2 100%);
+  box-shadow: 0 4px 24px rgba(0, 188, 212, 0.53);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.make-orders-container #cartSection {
+  margin-top: 2rem;
+  background: rgba(0, 188, 212, 0.08);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 1px 8px rgba(0, 188, 212, 0.08);
+}
+
+.make-orders-container table,
+.make-orders-cart table {
+  width: 100%;
+  min-width: 350px;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+
+.make-orders-container thead,
+.make-orders-cart thead {
+  background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+  color: #fff;
+}
+
+.make-orders-container th,
+.make-orders-container td,
+.make-orders-cart th,
+.make-orders-cart td {
+  border-bottom: 2px solid #1976d2;
+  padding: 5px;
+  text-align: center;
+}
+
+.make-orders-container tbody tr:hover,
+.make-orders-cart tbody tr:hover {
+  background: rgba(25, 118, 210, 0.08);
+}
+
+/* Button and delete styles from tables.css */
+.delete-btn {
+  background: linear-gradient(90deg, #d32f2f 0%, #b71c1c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  min-width: 80px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(211, 47, 47, 0.27);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin: 0 auto;
+  display: block;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(90deg, #b71c1c 0%, #d32f2f 100%);
+  box-shadow: 0 2px 12px rgba(211, 47, 47, 0.53);
+}
+
+.make-orders-row {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.make-orders-row-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* .make-orders-row-col--right class removed - no longer needed */
+
+.make-orders-row label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.make-orders-row input[type="text"],
+.make-orders-row input[type="number"],
+.make-orders-container input[type="text"],
+.make-orders-container input[type="email"],
+.make-orders-container input[type="number"],
+.make-orders-container select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #1976d2;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 1rem;
+  color: #333;
+  box-shadow: 0 1px 8px rgba(0, 188, 212, 0.08);
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+#submitOrderBtn {
+  margin-top: 2rem;
+  width: 50%;
+  padding: 0.9rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(90deg, #1976d2 0%, #00bcd4 100%);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 188, 212, 0.27);
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  display: block;
+  align-items: center;
+}
+
+#submitOrderBtn:hover {
+  background: linear-gradient(90deg, #00bcd4 0%, #1976d2 100%);
+  box-shadow: 0 4px 24px #00bcd4, 0 2px 8px rgba(0, 188, 212, 0.18);
+  transform: translateY(-2px) scale(1.05);
+}

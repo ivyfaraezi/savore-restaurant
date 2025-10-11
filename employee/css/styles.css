@@ -1,0 +1,112 @@
+.sidebar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 95vh;
+	width: 80px;
+	background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+	box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 1.5px 8px rgba(0,188,212,0.12);
+	border-radius: 0 32px 32px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 2rem 0.5rem 1rem 0;
+	z-index: 1200;
+	transition: width 0.3s cubic-bezier(.77,0,.18,1), box-shadow 0.3s;
+}
+.sidebar:hover {
+	width: 260px;
+	box-shadow: 0 16px 48px #00bcd4, 0 8px 24px rgba(0,0,0,0.18);
+}
+.sidebar-logo {
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	font-size: 2rem;
+	font-weight: 900;
+	color: #fff;
+	margin-bottom: 2.5rem;
+	text-shadow: 0 2px 12px #00bcd4, 0 1px 2px #fff;
+	cursor: pointer;
+	user-select: none;
+	transition: font-size 0.3s;
+}
+.sidebar-links {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+
+}
+.sidebar-links li {
+	margin-bottom: 1.5rem;
+	display: flex;
+	align-items: center;
+	justify-content: left;
+}
+.sidebar-links li a {
+	display: flex;
+	align-items: left;
+	gap: 0.7rem;
+	color: #fff;
+	font-size: 1.1rem;
+	font-weight: 600;
+	padding: 0.7rem 1.2rem;
+	border-radius: 12px;
+	transition: background 0.2s, color 0.2s;
+	text-decoration: none;
+}
+.sidebar-links li a:hover,
+.sidebar-links li a.active {
+	background: rgba(25, 118, 210, 0.18);
+	color: #fff;
+}
+.sidebar-links .icon {
+	font-size: 2rem;
+	transition: font-size 0.3s;
+}
+.logout-btn {
+	margin-top: auto;
+	width: 80%;
+	color: #fff;
+	background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+	border: none;
+	border-radius: 16px;
+	box-shadow: 0 2px 12px #1976d244;
+	padding: 1rem 1.5rem;
+	cursor: pointer;
+	font-size: 1.1rem;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	gap: 0.7rem;
+	transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+}
+.logout-btn:hover {
+	background: linear-gradient(90deg, #333 0%, #1976d2 100%);
+	box-shadow: 0 4px 24px #1976d288;
+	transform: translateY(-2px) scale(1.05);
+}
+
+.sidebar .logo-text,
+.sidebar-links .link-text,
+.logout-btn .link-text {
+	display: none;
+	transition: display 0.3s;
+}
+
+.sidebar:hover .logo-text,
+.sidebar:hover .sidebar-links .link-text,
+.sidebar:hover .logout-btn .link-text {
+	display: inline;
+}
+
+.sidebar:hover .logo-icon {
+	font-size: 2rem;
+}
+.sidebar:hover .sidebar-links .icon {
+	font-size: 1.5rem;
+	transition: font-size 0.3s;
+}

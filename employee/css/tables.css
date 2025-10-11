@@ -1,0 +1,455 @@
+body {
+  background: #fff;
+  color: #222;
+  font-family: "Segoe UI", "Roboto", Arial, sans-serif;
+  height: 100vh;
+  margin: 0;
+  padding: 2rem;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.page-flex {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1200px;
+  min-height: 80vh;
+}
+
+.book-table-container,
+.table-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 500px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 4px 32px rgba(0, 188, 212, 0.12);
+  margin-top: 4rem;
+
+}
+
+.book-table-container {
+  max-width: 500px;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  margin-top: 4rem;
+}
+
+.book-table-container h1 {
+  color: #1976d2;
+  font-size: 2.2rem;
+  text-align: center;
+}
+
+.book-table-container label,
+.special-requests label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.book-table-container input,
+.book-table-container textarea,
+.book-table-container select {
+  width: 90%;
+  padding: 0.7rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #1976d2;
+  background: rgba(255, 255, 255, 0.18);
+  font-size: 1rem;
+  color: #333;
+  box-shadow: 0 1px 8px rgba(0, 188, 212, 0.08);
+  transition: border-color 0.2s;
+}
+
+.book-table-container select {
+  width: 99%;
+}
+
+.book-table-container input:focus,
+.book-table-container textarea:focus {
+  border-color: #1976d2;
+  outline: none;
+}
+
+.book-table-container .button-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.table-container {
+  max-width: 1300px;
+  width: 100%;
+  min-width: 700px;
+  min-height: 700px;
+  padding: 0 2.5rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.table-heading {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1976d2;
+  letter-spacing: 0.02em;
+  padding: 16px;
+  text-align: center;
+}
+
+.table-wrapper {
+  max-height: 600px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.table-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+table {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  font-size: 1rem;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(25, 118, 210, 0.08);
+}
+
+thead {
+  background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+  color: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+th,
+td {
+  border-bottom: 2px solid #1976d2;
+  padding: 5px;
+  text-align: center;
+}
+
+tbody tr:hover {
+  background: rgba(25, 118, 210, 0.08);
+}
+
+tbody tr.selected {
+  background: rgba(25, 118, 210, 0.15);
+  border-left: 4px solid #1976d2;
+}
+
+tbody tr.selected:hover {
+  background: rgba(25, 118, 210, 0.2);
+}
+
+button {
+  margin-top: 0.8rem;
+  width: 48%;
+  padding: 0.5rem 0.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(90deg, #1976d2 0%, #333 100%);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 188, 212, 0.27);
+  cursor: pointer;
+  transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+  display: inline-block;
+  margin-right: 2%;
+}
+
+button:hover {
+  background: linear-gradient(90deg, #333 0%, #1976d2 100%);
+  box-shadow: 0 4px 24px rgba(0, 188, 212, 0.53);
+  transform: translateY(-2px) scale(1.03);
+}
+
+.delete-btn {
+  background: linear-gradient(90deg, #d32f2f 0%, #b71c1c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  min-width: 80px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(211, 47, 47, 0.27);
+  transition: background 0.2s, box-shadow 0.2s;
+  margin: 0 auto;
+  display: block;
+  width: 100%;
+}
+
+.delete-btn:hover {
+  background: linear-gradient(90deg, #b71c1c 0%, #d32f2f 100%);
+  box-shadow: 0 2px 12px rgba(211, 47, 47, 0.53);
+}
+
+/* Field Error Styling */
+.field-error {
+  display: block;
+  margin-top: 2px;
+  margin-bottom: 6px;
+  color: #c0392b;
+  font-size: 0.95rem;
+  font-weight: 600;
+  min-height: 1.2em;
+}
+
+.field-error::before {
+  content: "⚠";
+  margin-right: 8px;
+  color: #c0392b;
+  font-weight: 700;
+}
+
+.field-error:empty::before {
+  display: none;
+}
+
+/* Custom Time Picker Styling */
+.custom-time-picker {
+  position: relative;
+  width: 100%;
+}
+
+.custom-time-picker #time-display {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+  font-size: 1rem;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.custom-time-picker #time-display::placeholder {
+  color: #999;
+}
+
+.custom-time-picker #time-display:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.custom-time-picker #time-display::after {
+  content: "🕒";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.time-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  display: none;
+}
+
+.time-dropdown.show {
+  display: block;
+}
+
+.time-options {
+  padding: 0.5rem 0;
+}
+
+.time-option {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.time-option:hover {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.time-option.selected {
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+}
+
+/* Scrollbar styling for time dropdown */
+.time-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.time-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 8px;
+}
+
+.time-dropdown::-webkit-scrollbar-thumb {
+  background: #1976d2;
+  border-radius: 8px;
+}
+
+.time-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #1565c0;
+}
+
+/* Custom Date Picker Styling */
+.custom-date-picker {
+  position: relative;
+  width: 100%;
+}
+
+.custom-date-picker #date-display {
+  width: 100%;
+  padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+  font-size: 1rem;
+  color: #333;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  box-sizing: border-box;
+}
+
+.custom-date-picker #date-display::placeholder {
+  color: #999;
+}
+
+.custom-date-picker #date-display:focus {
+  outline: none;
+  border-color: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+}
+
+.date-picker-calendar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: none;
+  width: 280px;
+  padding: 1rem;
+}
+
+.date-picker-calendar.show {
+  display: block;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.calendar-nav {
+  background: transparent;
+  border: none;
+  color: #1976d2;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  font-weight: bold;
+}
+
+.calendar-nav:hover {
+  background-color: #e3f2fd;
+}
+
+.calendar-month-year {
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.calendar-weekday {
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #666;
+  padding: 0.3rem 0;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.3rem;
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.calendar-day:hover:not(.disabled):not(.empty) {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.calendar-day.selected {
+  background-color: #1976d2;
+  color: white;
+  font-weight: 600;
+}
+
+.calendar-day.today {
+  border: 2px solid #1976d2;
+}
+
+.calendar-day.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.calendar-day.empty {
+  cursor: default;
+}
+
+.calendar-day.other-month {
+  color: #999;
+}
