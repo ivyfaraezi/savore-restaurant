@@ -167,6 +167,7 @@ try {
     ?>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="scripts/script.js"></script>
+    <script src="scripts/logout.js"></script>
     <script>
         // Pass PHP data to JavaScript
         const menuTypes = <?php echo json_encode($menu_types); ?>;

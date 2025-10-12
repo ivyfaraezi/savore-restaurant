@@ -14,6 +14,7 @@ $result_tables = $conn->query($sql_tables);
     <title>Orders</title>
     <link rel="stylesheet" href="../styles/modern.css">
     <link rel="stylesheet" href="../styles/orders-list.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>
@@ -80,7 +81,7 @@ $result_tables = $conn->query($sql_tables);
                                 echo "<td>#" . htmlspecialchars($row['id']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['items']) . "</td>";
-                                echo "<td>$" . number_format($row['total'], 2) . "</td>";
+                                echo "<td>৳" . number_format($row['total'], 2) . "</td>";
                                 echo "<td><span class='$badgeClass'>" . htmlspecialchars(ucfirst($row['statuss'])) . "</span></td>";
                                 echo "</tr>";
                             }

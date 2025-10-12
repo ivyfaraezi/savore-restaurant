@@ -7,7 +7,7 @@ $result = $conn->query($sql);
 function displayStars($rating)
 {
     $stars = '';
-    $rating = max(1, min(5, intval($rating))); 
+    $rating = max(1, min(5, intval($rating)));
 
     for ($i = 1; $i <= 5; $i++) {
         if ($i <= $rating) {
@@ -26,6 +26,7 @@ function displayStars($rating)
     <title>Reviews</title>
     <link rel="stylesheet" href="../styles/modern.css">
     <link rel="stylesheet" href="../styles/reviews.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>

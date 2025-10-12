@@ -88,6 +88,7 @@ $categoriesResult = $conn->query($categoriesQuery);
     <script src="../scripts/make-orders.js" defer></script>
     <link rel="stylesheet" href="../css/make-orders.css">
     <link rel="stylesheet" href="../css/styles.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>

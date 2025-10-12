@@ -33,14 +33,22 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-$password = isset($_POST['password']) ? $_POST['password'] : '';
+$password = isset($_POST['password']) ? trim($_POST['password']) : '';
 
 $errors = [];
 
 if ($email === '') {
-    $errors['email'] = 'Email is required.';
-} elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $errors['email'] = 'Invalid email format.';
+    $errors['email'] = 'Email or username is required.';
+} else {
+    if (strpos($email, '@') !== false) {
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Invalid email format.';
+        }
+    } else {
+        if (!preg_match('/^(?:emp|adm)-\d+$/i', $email)) {
+            $errors['email'] = 'Invalid username format.';
+        }
+    }
 }
 
 if ($password === '') {
@@ -50,6 +58,49 @@ if ($password === '') {
 if (!empty($errors)) {
     send_json($conn, ['success' => false, 'message' => 'Validation failed', 'errors' => $errors]);
 }
+$isHandled = false;
+
+// First, check if credentials match the 'login' table (admin/employee generic login)
+if (!$isHandled) {
+    $stmtL = $conn->prepare("SELECT id, username, password_hash, created_at FROM login WHERE username = ? LIMIT 1");
+    $stmtL->bind_param("s", $email);
+    $stmtL->execute();
+    $resL = $stmtL->get_result();
+    if ($resL && $resL->num_rows > 0) {
+        $row = $resL->fetch_assoc();
+        $stored = $row['password_hash'];
+        $matches = false;
+        if (password_verify($password, $stored)) {
+            $matches = true;
+        } elseif ($password === $stored) {
+            $matches = true;
+        }
+
+        if ($matches) {
+            $username = $row['username'];
+            $passwordHashRaw = $row['password_hash'];
+            $uname = strtolower($username);
+            $ph = strtolower($passwordHashRaw);
+            if (preg_match('/^emp-(\d+)$/', $uname, $mU) && strpos($ph, $mU[1]) !== false) {
+                session_start();
+                $_SESSION['employee_login_id'] = $row['id'];
+                $_SESSION['employee_username'] = $username;
+                send_json($conn, ['success' => true, 'message' => 'Employee login successful', 'redirect' => '../employee/index.php']);
+            }
+            if (preg_match('/^adm-(\d+)$/', $uname, $mU2) && strpos($ph, $mU2[1]) !== false) {
+                session_start();
+                $_SESSION['admin_login_id'] = $row['id'];
+                $_SESSION['admin_username'] = $username;
+                send_json($conn, ['success' => true, 'message' => 'Admin login successful', 'redirect' => '../admin/index.php']);
+            }
+            send_json($conn, ['success' => false, 'message' => 'Invalid username or password']);
+        } else {
+            send_json($conn, ['success' => false, 'message' => 'Invalid username or password']);
+        }
+    }
+}
+
+// Fallback: customer email login (existing behavior)
 $stmt = $conn->prepare("SELECT id, name, email, mobile, password, email_verified_at FROM customers WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();

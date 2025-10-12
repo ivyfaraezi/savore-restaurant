@@ -238,6 +238,11 @@ document.getElementById("signin-form").addEventListener("submit", function (e) {
         document.querySelector(".signin-btn").style.display = "none";
         document.querySelector(".user-icon").style.display = "inline-block";
         document.getElementById("signin-modal").style.display = "none";
+        // If server requests a redirect (for admin/employee), follow it
+        if (data.redirect) {
+          window.location.href = data.redirect;
+          return;
+        }
         const customer = data.customer;
         document.getElementById("dropdown-username").textContent =
           customer.name;
@@ -354,6 +359,7 @@ document.addEventListener("click", function (e) {
   }
 });
 document.getElementById("logout-btn").addEventListener("click", function () {
+  if (!confirm("Are you want to log out ?")) return;
   fetch("auth/logout.php", {
     method: "POST",
   })
@@ -378,12 +384,12 @@ document.getElementById("logout-btn").addEventListener("click", function () {
         if (floatingReservationBtn) {
           floatingReservationBtn.style.display = "none";
         }
-        window.location.reload();
+        window.location.href = "index.php";
       }
     })
     .catch((error) => {
       console.error("Logout error:", error);
-      window.location.reload();
+      window.location.href = "index.php";
     });
 });
 

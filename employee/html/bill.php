@@ -13,6 +13,7 @@ $result = $conn->query($sql);
     <title>Bill</title>
     <link rel="stylesheet" href="../css/bill.css">
     <link rel="stylesheet" href="../css/styles.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>

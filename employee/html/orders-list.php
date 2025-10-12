@@ -127,6 +127,7 @@ $result = $conn->query($sql);
     <title>Order Management</title>
     <link rel="stylesheet" href="../css/orders-list.css">
     <link rel="stylesheet" href="../css/styles.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>

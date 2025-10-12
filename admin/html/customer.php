@@ -108,6 +108,7 @@ if (!$result) {
     <title>Customer</title>
     <link rel="stylesheet" href="../styles/modern.css">
     <link rel="stylesheet" href="../styles/customer.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>

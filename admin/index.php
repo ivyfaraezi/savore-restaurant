@@ -197,6 +197,7 @@ $recent_tables_result = $conn->query("SELECT name, tableno, guests, datee, times
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="scripts/script.js"></script>
+    <script src="scripts/logout.js"></script>
     <script>
         const menuTypes = <?php echo json_encode($menu_types); ?>;
         const menuCounts = <?php echo json_encode($menu_counts); ?>;

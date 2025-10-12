@@ -252,6 +252,7 @@ $employees_result = $conn->query("SELECT * FROM employee ORDER BY id");
     <title>Employee</title>
     <link rel="stylesheet" href="../styles/modern.css">
     <link rel="stylesheet" href="../styles/employee.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>

@@ -328,6 +328,7 @@ if ($result) {
     <title>Tables</title>
     <link rel="stylesheet" href="../css/tables.css">
     <link rel="stylesheet" href="../css/styles.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>

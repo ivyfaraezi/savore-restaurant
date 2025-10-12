@@ -119,13 +119,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($photo) {
                 $stmt = $conn->prepare("UPDATE menu SET name = ?, type = ?, price = ?, photo = ? WHERE id = ?");
                 $null = NULL;
-                $stmt->bind_param("ssisi", $name, $type, $price, $null, $menu_id);
+                $stmt->bind_param("ssibi", $name, $type, $price, $null, $menu_id);
                 $stmt->send_long_data(3, $photo);
             } else {
                 $stmt = $conn->prepare("UPDATE menu SET name = ?, type = ?, price = ? WHERE id = ?");
                 $stmt->bind_param("ssii", $name, $type, $price, $menu_id);
             }
             if ($stmt->execute()) {
+                $message = 'Menu item updated successfully!';
+                $messageType = 'success';
                 $_POST = array();
                 $editMode = false;
                 $menuData = null;
@@ -162,6 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Menu</title>
     <link rel="stylesheet" href="../styles/modern.css">
     <link rel="stylesheet" href="../styles/menu.css">
+    <script src="../scripts/logout.js"></script>
 </head>
 
 <body>
@@ -202,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <select name="type">
                     <option value="">Type of The Item</option>
                     <option value="burgers" <?php echo ($editMode && $menuData && $menuData['type'] == 'burgers') || (isset($_POST['type']) && $_POST['type'] == 'burgers') ? 'selected' : ''; ?>>Burgers</option>
-                    <option value="sandwiches" <?php echo ($editMode && $menuData && $menuData['type'] == 'sandwiches') || (isset($_POST['type']) && $_POST['type'] == 'sandwiches') ? 'selected' : ''; ?>>Sandwiches</option>
+                    <option value="bebidas" <?php echo ($editMode && $menuData && $menuData['type'] == 'bebidas') || (isset($_POST['type']) && $_POST['type'] == 'bebidas') ? 'selected' : ''; ?>>Bebidas</option>
                     <option value="chickens" <?php echo ($editMode && $menuData && $menuData['type'] == 'chickens') || (isset($_POST['type']) && $_POST['type'] == 'chickens') ? 'selected' : ''; ?>>Chickens</option>
                     <option value="rice" <?php echo ($editMode && $menuData && $menuData['type'] == 'rice') || (isset($_POST['type']) && $_POST['type'] == 'rice') ? 'selected' : ''; ?>>Rice</option>
                     <option value="shakes" <?php echo ($editMode && $menuData && $menuData['type'] == 'shakes') || (isset($_POST['type']) && $_POST['type'] == 'shakes') ? 'selected' : ''; ?>>Shakes</option>
@@ -218,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php if ($editMode && $menuData && $menuData['photo']): ?>
                     <div class="current-photo-preview">
                         <small>Current photo:</small><br>
-                        <img src="get_image.php?id=<?php echo $menuData['id']; ?>&table=menu"
+                        <img src="get_image.php?id=<?php echo $menuData['id']; ?>&table=menu&t=<?php echo time(); ?>"
                             alt="Current Photo" class="current-photo-preview">
                         <br><small>Upload a new photo to replace current one (optional)</small>
                     </div>
@@ -258,8 +261,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 echo "<td>" . htmlspecialchars($row['id']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['name']) . "</td>";
                                 echo "<td>" . htmlspecialchars(ucfirst(str_replace('_', ' ', $row['type']))) . "</td>";
-                                echo "<td>$" . htmlspecialchars($row['price']) . "</td>";
-                                echo "<td><img src='get_image.php?id=" . $row['id'] . "&table=menu' alt='" . htmlspecialchars($row['name']) . "' class='table-image'></td>";
+                                echo "<td>৳" . htmlspecialchars($row['price']) . "</td>";
+                                echo "<td><img src='get_image.php?id=" . $row['id'] . "&table=menu&t=" . time() . "' alt='" . htmlspecialchars($row['name']) . "' class='table-image'></td>";
                                 echo "<td>";
                                 echo "<a href='menu.php?edit_id=" . $row['id'] . "' class='action-btn edit-btn edit-btn-link'>Edit</a>";
                                 echo "<button class='action-btn delete-btn' onclick='deleteMenuItem(" . $row['id'] . ", \"" . htmlspecialchars($row['name'], ENT_QUOTES) . "\")'>Delete</button>";
