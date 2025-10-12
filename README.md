@@ -53,6 +53,7 @@ The project emphasizes user experience with responsive design, real-time updates
 - **Reviews & Ratings**: Submit feedback with star ratings
 - **Order History**: View and manage past orders
 - **Profile Management**: Update account information and change passwords
+- **Contact Form**: Send inquiries and messages with email notifications to restaurant
 
 ### 👨‍💼 Employee Features
 
@@ -258,6 +259,25 @@ CREATE TABLE `reviews` (
   `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Messages Table (Contact Form)
+CREATE TABLE `messages` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `name` VARCHAR(255) NOT NULL,
+  `email` VARCHAR(255) NOT NULL,
+  `phone` VARCHAR(20),
+  `subject` VARCHAR(500),
+  `message` TEXT NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Login Table (Admin/Employee Authentication)
+CREATE TABLE `login` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `username` VARCHAR(50) NOT NULL UNIQUE,
+  `password_hash` VARCHAR(255) NOT NULL,
+  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
 #### 4. Configure Email Settings (Required for Full Functionality)
@@ -356,14 +376,23 @@ runner.bat
    - Submit reservation
 
 5. **Leave a Review**:
+
    - Scroll to Reviews section
    - Rate with stars (1-5)
    - Write your feedback
    - Submit review
 
+6. **Contact Restaurant**:
+   - Navigate to Contact section
+   - Fill in name, email, phone, subject, and message
+   - Submit to send inquiry directly to restaurant
+   - Message is saved in database and email notification sent
+
 ### For Employees
 
 1. **Login**: Access employee dashboard at `/employee/index.php`
+   - Use username format: `emp-[number]` (e.g., emp-123)
+   - Credentials stored in `login` table
 2. **Dashboard**: View analytics and recent activities
 3. **Manage Orders**:
    - View all orders in Orders List
@@ -376,6 +405,8 @@ runner.bat
 ### For Administrators
 
 1. **Login**: Access admin panel at `/admin/index.php`
+   - Use username format: `adm-[number]` (e.g., adm-001)
+   - Credentials stored in `login` table
 2. **Dashboard**: Monitor overall statistics with visual charts
 3. **Manage Menu**:
    - Add new menu items with images
@@ -469,12 +500,16 @@ savore-restaurant/
 4. **orders** - Customer orders and status
 5. **tables** - Table reservation records
 6. **reviews** - Customer reviews and ratings
+7. **messages** - Contact form submissions from customers
+8. **login** - Admin and employee authentication credentials
 
 ### Relationships:
 
 - Orders are linked to customers via email
 - Table reservations are linked to customers via email
 - Reviews can be submitted by any user (registered or guest)
+- Messages are standalone contact form submissions
+- Login table contains username-based credentials for admin (adm-_) and employee (emp-_) accounts
 
 ---
 
@@ -615,7 +650,7 @@ limitations under the License.
 For questions, suggestions, or support:
 
 - **GitHub Issues**: [Report a bug or request a feature](https://github.com/tuRjoX/savore-restaurant/issues)
-- **GitHub Repository**: [https://github.com/tuRjoX/savore-restaurant](https://github.com/tuRjoX/savore-restaurant)
+- **GitHub Repository**: [Github Repository Link](https://github.com/tuRjoX/savore-restaurant)
 
 ---
 
@@ -657,7 +692,7 @@ Planned features for future releases:
 
 - **Total Lines of Code**: ~15,000+
 - **Languages**: PHP, JavaScript, HTML, CSS
-- **Database Tables**: 6
+- **Database Tables**: 8 (customers, employee, menu, orders, tables, reviews, messages, login)
 - **API Endpoints**: 20+
 - **User Roles**: 3 (Customer, Employee, Admin)
 
