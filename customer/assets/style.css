@@ -1201,6 +1201,34 @@ footer {
   font-size: 16px;
   box-sizing: border-box;
 }
+#signin-submit-btn {
+  background: #bfa46b;
+  color: #181818;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 8px;
+}
+#signin-submit-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}
+.btn-spinner i {
+  display: inline-block;
+}
+
+.btn-text,
+.btn-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #modal-title {
   font-family: "Georgia", serif;
   font-size: 2em;

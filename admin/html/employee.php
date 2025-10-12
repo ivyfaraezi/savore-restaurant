@@ -1,5 +1,116 @@
 <?php
 require_once '../config/database.php';
+require_once '../vendor/autoload.php';
+require_once '../config/mail.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+function buildEmployeeEmailTemplate($title, $content, $footerNote = '')
+{
+    $html = '
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>' . htmlspecialchars($title) . '</title>
+</head>
+<body style="margin:0;padding:0;font-family:Arial,sans-serif;background-color:#f4f4f4;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f4f4f4;padding:20px 0;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background-color:#2d2d2d;padding:30px 20px;text-align:center;">
+                            <h1 style="margin:0;color:#d4a649;font-size:28px;font-weight:bold;">🍽️ Savoré Restaurant</h1>
+                            <p style="margin:8px 0 0 0;color:#ffffff;font-size:14px;">' . htmlspecialchars($title) . '</p>
+                        </td>
+                    </tr>
+                    <!-- Body -->
+                    <tr>
+                        <td style="padding:40px 30px;color:#333333;font-size:15px;line-height:1.6;">
+                            ' . $content . '
+                        </td>
+                    </tr>';
+
+    if (!empty($footerNote)) {
+        $html .= '
+                    <!-- Additional Info -->
+                    <tr>
+                        <td style="padding:20px 30px;background-color:#e8f5e9;border-top:2px solid #d4a649;">
+                            <p style="margin:0;color:#2e7d32;font-size:14px;"><strong>What\'s Next?</strong></p>
+                            <p style="margin:8px 0 0 0;color:#555555;font-size:13px;">' . $footerNote . '</p>
+                        </td>
+                    </tr>';
+    }
+
+    $html .= '
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color:#2d2d2d;padding:25px 20px;text-align:center;color:#ffffff;font-size:12px;">
+                            <p style="margin:0 0 10px 0;color:#d4a649;font-weight:bold;">© ' . date('Y') . ' Savoré Restaurant. All rights reserved.</p>
+                            <p style="margin:0;color:#cccccc;">
+                                <strong>Phone:</strong> +880-1854048383, +880-1992346336<br>
+                                <strong>Email:</strong> savore.2006@gmail.com<br>
+                                <strong>Website:</strong> <a href="https://www.savore.com" style="color:#d4a649;text-decoration:none;">www.savore.com</a>
+                            </p>
+                            <p style="margin:15px 0 0 0;color:#999999;font-size:11px;">
+                                For any questions, contact us at +880-1854048383, +880-1992346336
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>';
+    return $html;
+}
+
+function sendEmployeeEmail($to, $toName, $subject, $htmlBody, $altBody = '')
+{
+    global $mailConfig;
+    try {
+        $mail = new PHPMailer(true);
+        if (!empty($mailConfig['smtp']) && $mailConfig['smtp']['enabled']) {
+            $mail->isSMTP();
+            $mail->Host = $mailConfig['smtp']['host'];
+            $mail->SMTPAuth = true;
+            $mail->Username = $mailConfig['smtp']['username'];
+            $mail->Password = $mailConfig['smtp']['password'];
+            $mail->SMTPSecure = !empty($mailConfig['smtp']['encryption']) ? $mailConfig['smtp']['encryption'] : '';
+            $mail->Port = $mailConfig['smtp']['port'];
+        }
+        $mail->CharSet = 'UTF-8';
+        $mail->setFrom($mailConfig['from_email'], $mailConfig['from_name']);
+        $mail->addAddress($to, $toName);
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body = $htmlBody;
+        $mail->AltBody = $altBody ?: strip_tags($htmlBody);
+        if (!empty($mailConfig['debug'])) {
+            $mail->SMTPDebug = 2;
+            $debugOutput = '';
+            $mail->Debugoutput = function ($str, $level) use (&$debugOutput) {
+                $debugOutput .= "[level $level] $str\n";
+            };
+        }
+
+        $mail->send();
+
+        if (!empty($mailConfig['debug']) && !empty($debugOutput)) {
+            error_log("PHPMailer debug output:\n" . $debugOutput);
+        }
+
+        return [true, ''];
+    } catch (Exception $e) {
+        error_log('Mail error (sendEmployeeEmail): ' . $e->getMessage());
+        return [false, $e->getMessage()];
+    }
+}
 
 $message = '';
 $messageType = '';
@@ -168,6 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->bind_param("ssisssi", $name, $position, $mobile, $gender, $email, $address, $employee_id);
             }
 
+            // Employee update
             try {
                 if ($stmt->execute()) {
                     $message = 'Employee updated successfully!';
@@ -175,6 +287,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_POST = array();
                     $editMode = false;
                     $employeeData = null;
+                    if (!empty($email)) {
+                        $emailContent = '
+                            <p style="margin:0 0 15px 0;">Dear <strong>' . htmlspecialchars($name) . '</strong>,</p>
+                            <p style="margin:0 0 15px 0;">Your employee profile has been successfully updated by the administrator.</p>
+                            <div style="background-color:#fff9e6;padding:15px;border-left:4px solid #d4a649;margin:20px 0;">
+                                <p style="margin:0;color:#555;"><strong>Position:</strong> ' . htmlspecialchars(ucfirst($position)) . '</p>
+                                <p style="margin:8px 0 0 0;color:#555;"><strong>Email:</strong> ' . htmlspecialchars($email) . '</p>
+                            </div>
+                            <p style="margin:15px 0 0 0;">If you believe this is a mistake or have any questions, please contact the administrator immediately.</p>
+                            <p style="margin:15px 0 0 0;color:#666;font-style:italic;">Thank you for being part of the Savoré team!</p>
+                        ';
+                        $fullHtml = buildEmployeeEmailTemplate(
+                            'Profile Update Notification',
+                            $emailContent,
+                            'Your profile information has been updated. Please review the changes and contact us if you have any concerns.'
+                        );
+                        list($sent, $err) = sendEmployeeEmail(
+                            $email,
+                            $name,
+                            'Savoré Restaurant - Your Profile Has Been Updated',
+                            $fullHtml,
+                            'Hi ' . $name . ",\n\nYour employee profile has been updated by the admin.\nPosition: " . ucfirst($position) . "\n\nIf you believe this is a mistake, please contact the administrator.\n\nThank you,\nSavoré Restaurant Team"
+                        );
+                        if (!$sent) {
+                            $message .= ' (Warning: email not sent)';
+                            error_log('Failed to send update email to ' . $email . ': ' . $err);
+                        }
+                    }
                     echo "<script>window.location.href = 'employee.php';</script>";
                 } else {
                     $message = 'Error updating employee: ' . $stmt->error;
@@ -215,11 +355,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->bind_param("ssisssb", $name, $position, $mobile, $gender, $email, $address, $null);
                 $stmt->send_long_data(6, $photo);
 
+                // New employee insertion
                 try {
                     if ($stmt->execute()) {
                         $message = 'Employee added successfully!';
                         $messageType = 'success';
                         $_POST = array();
+                        if (!empty($email)) {
+                            $emailContent = '
+                                <p style="margin:0 0 15px 0;">Dear <strong>' . htmlspecialchars($name) . '</strong>,</p>
+                                <p style="margin:0 0 20px 0;">Welcome to the Savoré Restaurant team! We are delighted to have you join us.</p>
+                                <div style="background-color:#fff9e6;padding:20px;border-left:4px solid #d4a649;margin:20px 0;border-radius:4px;">
+                                    <h3 style="margin:0 0 10px 0;color:#d4a649;font-size:18px;">Your Assignment Details</h3>
+                                    <table cellpadding="5" cellspacing="0" border="0" style="width:100%;">
+                                        <tr>
+                                            <td style="color:#555;padding:5px 0;"><strong>Position:</strong></td>
+                                            <td style="color:#333;padding:5px 0;">' . htmlspecialchars(ucfirst($position)) . '</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color:#555;padding:5px 0;"><strong>Email:</strong></td>
+                                            <td style="color:#333;padding:5px 0;">' . htmlspecialchars($email) . '</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="color:#555;padding:5px 0;"><strong>Mobile:</strong></td>
+                                            <td style="color:#333;padding:5px 0;">' . htmlspecialchars($mobile) . '</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <p style="margin:20px 0 0 0;">Please reach out to the administrator for your login credentials and further instructions.</p>
+                                <p style="margin:15px 0 0 0;color:#666;font-weight:bold;">We look forward to working with you!</p>
+                            ';
+                            $fullHtml = buildEmployeeEmailTemplate(
+                                'Welcome to Savoré Restaurant',
+                                $emailContent,
+                                'Your account has been created. Please contact the administrator at savore.2006@gmail.com or +123-456-7890 for your login credentials and onboarding details.'
+                            );
+                            list($sent, $err) = sendEmployeeEmail(
+                                $email,
+                                $name,
+                                'Welcome to Savoré Restaurant - You Have Been Assigned as ' . ucfirst($position),
+                                $fullHtml,
+                                'Hi ' . $name . ",\n\nWelcome to Savoré Restaurant! You have been assigned as " . ucfirst($position) . ".\n\nYour Details:\n- Position: " . ucfirst($position) . "\n- Email: " . $email . "\n- Mobile: " . $mobile . "\n\nPlease contact the administrator for login credentials and further details.\n\nWe look forward to working with you!\n\nSavoré Restaurant Team"
+                            );
+                            if (!$sent) {
+                                $message .= ' (Warning: welcome email not sent)';
+                                error_log('Failed to send welcome email to ' . $email . ': ' . $err);
+                            }
+                        }
                     } else {
                         $message = 'Error adding employee: ' . $stmt->error;
                         $messageType = 'error';

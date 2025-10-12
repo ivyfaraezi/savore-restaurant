@@ -138,6 +138,147 @@ if ($rememberMe) {
     }
 }
 
+// --- send login notification email (non-blocking) ---
+// Capture client IP and user agent, then attempt to send an email to the customer.
+// Any errors are caught and logged so they don't affect the login flow.
+try {
+    function get_client_ip()
+    {
+        $keys = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+            'HTTP_FORWARDED_FOR',
+            'HTTP_FORWARDED',
+            'REMOTE_ADDR'
+        ];
+        foreach ($keys as $k) {
+            if (!empty($_SERVER[$k])) {
+                $ips = explode(',', $_SERVER[$k]);
+                // return first valid IP after trimming
+                foreach ($ips as $ip) {
+                    $ip = trim($ip);
+                    if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                        return $ip;
+                    }
+                }
+            }
+        }
+        return 'Unknown';
+    }
+
+    $clientIp = get_client_ip();
+    if ($clientIp === '::1' || $clientIp === '0:0:0:0:0:0:0:1') {
+        $clientIp = '127.0.0.1';
+    }
+    $userAgent = isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : 'Unknown';
+
+    function summarize_user_agent($ua)
+    {
+        if (!$ua || $ua === 'Unknown') {
+            return 'Unknown';
+        }
+        $browser = 'Unknown browser';
+        $os = 'Unknown OS';
+
+        // Browser detection (order matters)
+        if (stripos($ua, 'Edg/') !== false || stripos($ua, 'Edge/') !== false) {
+            $browser = 'Edge';
+        } elseif (stripos($ua, 'OPR/') !== false || stripos($ua, 'Opera') !== false) {
+            $browser = 'Opera';
+        } elseif (stripos($ua, 'Chrome/') !== false && stripos($ua, 'Chromium') === false) {
+            $browser = 'Chrome';
+        } elseif (stripos($ua, 'CriOS') !== false) {
+            $browser = 'Chrome (iOS)';
+        } elseif (stripos($ua, 'Firefox/') !== false) {
+            $browser = 'Firefox';
+        } elseif (stripos($ua, 'Safari/') !== false && stripos($ua, 'Chrome/') === false) {
+            $browser = 'Safari';
+        }
+
+        // OS detection
+        if (stripos($ua, 'Windows NT 10.0') !== false) {
+            $os = 'Windows 10';
+        } elseif (stripos($ua, 'Windows NT 6.1') !== false) {
+            $os = 'Windows 7';
+        } elseif (stripos($ua, 'Windows NT 6.2') !== false) {
+            $os = 'Windows 8';
+        } elseif (stripos($ua, 'Mac OS X') !== false || stripos($ua, 'Macintosh') !== false) {
+            $os = 'macOS';
+        } elseif (stripos($ua, 'Android') !== false) {
+            $os = 'Android';
+        } elseif (stripos($ua, 'iPhone') !== false || stripos($ua, 'iPad') !== false) {
+            $os = 'iOS';
+        } elseif (stripos($ua, 'Linux') !== false) {
+            $os = 'Linux';
+        }
+
+        return $browser . ' on ' . $os;
+    }
+    $friendlyUA = summarize_user_agent($userAgent);
+    $time = date('Y-m-d H:i:s');
+
+    $email_config = require_once __DIR__ . '/../config/email_config.php';
+    require_once __DIR__ . '/../vendor/autoload.php';
+
+    if (!empty($customer['email'])) {
+        $toEmail = $customer['email'];
+        $toName = $customer['name'];
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+        $mail->isSMTP();
+        $mail->Host = $email_config['smtp_host'];
+        $mail->SMTPAuth = true;
+        $mail->Username = $email_config['smtp_username'];
+        $mail->Password = $email_config['smtp_password'];
+        $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $email_config['smtp_port'];
+
+        $mail->setFrom($email_config['from_email'], $email_config['from_name']);
+        $mail->addAddress($toEmail, $toName);
+        $mail->addReplyTo($email_config['from_email'], $email_config['from_name']);
+        $mail->isHTML(true);
+        $mail->CharSet = 'UTF-8';
+        $mail->Subject = 'New sign-in to your Savoré account';
+
+        $appUrl = isset($email_config['app_url']) ? rtrim($email_config['app_url'], '/') : '';
+
+        $mailBody = "<!doctype html>";
+        $mailBody .= "<html><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">";
+        $mailBody .= "<style>body{font-family:Arial,Helvetica,sans-serif;color:#333} .container{max-width:600px;margin:0 auto;padding:20px} .header{background:#1f2937;color:#fff;padding:20px;text-align:center;border-radius:6px 6px 0 0} .content{background:#fff;padding:24px;border:1px solid #e6e6e6;border-top:0;border-radius:0 0 6px 6px} .btn{display:inline-block;padding:10px 16px;background:#bfa46b;color:#111;text-decoration:none;border-radius:6px} .muted{color:#6b7280;font-size:13px}</style></head><body>";
+        $mailBody .= "<div class=\"container\">";
+        $mailBody .= "<div class=\"header\"><h2 style=\"margin:0;font-weight:600;\">Savoré Restaurant</h2><div style=\"font-size:14px;margin-top:6px;opacity:.9\">Security notification</div></div>";
+        $mailBody .= "<div class=\"content\">";
+        $mailBody .= "<p>Hi " . htmlspecialchars($toName) . ",</p>";
+        $mailBody .= "<p>We noticed a sign-in to your Savoré account. If this was you, there's nothing to do. If you don't recognize this activity, please secure your account immediately.</p>";
+        $mailBody .= "<table style=\"width:100%;margin:12px 0;border-collapse:collapse;font-size:14px\">";
+        $mailBody .= "<tr><td style=\"padding:8px 0;vertical-align:top;width:170px;color:#111;font-weight:600\">IP address</td><td style=\"padding:8px 0;\">" . htmlspecialchars($clientIp) . "</td></tr>";
+        $mailBody .= "<tr><td style=\"padding:8px 0;vertical-align:top;font-weight:600\">Time</td><td style=\"padding:8px 0;\">" . htmlspecialchars($time) . "</td></tr>";
+        $mailBody .= "<tr><td style=\"padding:8px 0;vertical-align:top;font-weight:600\">Device / Browser</td><td style=\"padding:8px 0;\">" . htmlspecialchars($friendlyUA) . "</td></tr>";
+        $mailBody .= "</table>";
+        $mailBody .= "<p class=\"muted\">Full user agent: <span style=\"display:block;margin-top:6px;word-break:break-all;\">" . htmlspecialchars($userAgent) . "</span></p>";
+        $mailBody .= "<p style=\"margin-top:18px;\">If you need help, contact our support at <strong>savore.2006@gmail.com</strong>.</p>";
+        $mailBody .= "<p style=\"margin-top:18px;font-size:13px;color:#6b7280\">This is an automated message — please do not reply to this email.</p>";
+        $mailBody .= "</div></div></body></html>";
+
+        $plain = "Hi $toName\n\nWe noticed a sign-in to your Savoré account.\n\nIP address: $clientIp\nTime: $time\nDevice/Browser: $friendlyUA\n\nIf you don't recognize this activity, please secure your account.";
+        $plain .= "\n\nFull user agent: $userAgent\n\nIf you need help, contact support at savore.2006@gmail.com\n\n— Savoré Restaurant";
+
+        $mail->Body = $mailBody;
+        $mail->AltBody = $plain;
+
+        try {
+            $mail->send();
+        } catch (Exception $e) {
+            error_log('Login notification email failed: ' . $e->getMessage());
+        }
+    }
+} catch (Exception $e) {
+    // non-fatal: log and continue
+    error_log('Login notification error: ' . $e->getMessage());
+}
+
 send_json($conn, [
     'success' => true,
     'message' => 'Login successful',

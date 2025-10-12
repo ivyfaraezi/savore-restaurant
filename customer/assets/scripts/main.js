@@ -214,6 +214,21 @@ document.getElementById("signin-form").addEventListener("submit", function (e) {
   const password = document.getElementById("signin-password").value;
   const rememberMe = document.getElementById("remember-me").checked;
 
+  const submitBtn = document.getElementById("signin-submit-btn");
+  const btnText = submitBtn ? submitBtn.querySelector(".btn-text") : null;
+  const btnSpinner = submitBtn ? submitBtn.querySelector(".btn-spinner") : null;
+
+  // show spinner & disable button
+  if (submitBtn) {
+    submitBtn.disabled = true;
+  }
+  if (btnText) {
+    btnText.style.display = "none";
+  }
+  if (btnSpinner) {
+    btnSpinner.style.display = "inline-block";
+  }
+
   const formData = new FormData();
   formData.append("email", email);
   formData.append("password", password);
@@ -221,71 +236,88 @@ document.getElementById("signin-form").addEventListener("submit", function (e) {
     formData.append("remember_me", "on");
   }
 
-  fetch("auth/login.php", {
-    method: "POST",
-    body: formData,
-  })
-    .then((response) => {
-      if (!response.ok) {
-        return response.text().then((text) => {
-          throw new Error("HTTP " + response.status + " - " + text);
-        });
-      }
-      return response.json();
+  // allow DOM updates (spinner) to paint before starting the network request
+  setTimeout(() => {
+    fetch("auth/login.php", {
+      method: "POST",
+      body: formData,
     })
-    .then((data) => {
-      if (data.success) {
-        document.querySelector(".signin-btn").style.display = "none";
-        document.querySelector(".user-icon").style.display = "inline-block";
-        document.getElementById("signin-modal").style.display = "none";
-        // If server requests a redirect (for admin/employee), follow it
-        if (data.redirect) {
-          window.location.href = data.redirect;
-          return;
+      .then((response) => {
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error("HTTP " + response.status + " - " + text);
+          });
         }
-        const customer = data.customer;
-        document.getElementById("dropdown-username").textContent =
-          customer.name;
-        document.getElementById("dropdown-name").textContent = customer.name;
-        document.getElementById("dropdown-email").textContent = customer.email;
-        document.getElementById("dropdown-mobile").textContent =
-          customer.mobile;
-        const floatingBtn = document.getElementById("floating-orders-btn");
-        if (floatingBtn) {
-          floatingBtn.style.display = "flex";
-        }
+        return response.json();
+      })
+      .then((data) => {
+        if (data.success) {
+          document.querySelector(".signin-btn").style.display = "none";
+          document.querySelector(".user-icon").style.display = "inline-block";
+          document.getElementById("signin-modal").style.display = "none";
+          // If server requests a redirect (for admin/employee), follow it
+          if (data.redirect) {
+            window.location.href = data.redirect;
+            return;
+          }
+          const customer = data.customer;
+          document.getElementById("dropdown-username").textContent =
+            customer.name;
+          document.getElementById("dropdown-name").textContent = customer.name;
+          document.getElementById("dropdown-email").textContent =
+            customer.email;
+          document.getElementById("dropdown-mobile").textContent =
+            customer.mobile;
+          const floatingBtn = document.getElementById("floating-orders-btn");
+          if (floatingBtn) {
+            floatingBtn.style.display = "flex";
+          }
 
-        const floatingReservationBtn = document.getElementById(
-          "floating-reservations-btn"
-        );
-        if (floatingReservationBtn) {
-          floatingReservationBtn.style.display = "flex";
-        }
-        this.reset();
-      } else {
-        if (data.errors) {
-          if (data.errors.email) {
-            document.getElementById("signin-email-error").textContent =
-              data.errors.email;
+          const floatingReservationBtn = document.getElementById(
+            "floating-reservations-btn"
+          );
+          if (floatingReservationBtn) {
+            floatingReservationBtn.style.display = "flex";
           }
-          if (data.errors.password) {
-            document.getElementById("signin-password-error").textContent =
-              data.errors.password;
-          }
-          signinMessage.textContent = data.message || "Please fix the errors.";
-          signinMessage.className = "message-container error";
+          this.reset();
         } else {
-          signinMessage.textContent = data.message || "Login failed.";
-          signinMessage.className = "message-container error";
+          if (data.errors) {
+            if (data.errors.email) {
+              document.getElementById("signin-email-error").textContent =
+                data.errors.email;
+            }
+            if (data.errors.password) {
+              document.getElementById("signin-password-error").textContent =
+                data.errors.password;
+            }
+            signinMessage.textContent =
+              data.message || "Please fix the errors.";
+            signinMessage.className = "message-container error";
+          } else {
+            signinMessage.textContent = data.message || "Login failed.";
+            signinMessage.className = "message-container error";
+          }
         }
-      }
-    })
-    .catch((error) => {
-      console.error("Error during login fetch:", error);
-      signinMessage.textContent =
-        error.message || "Network error. Please try again.";
-      signinMessage.className = "message-container error";
-    });
+      })
+      .catch((error) => {
+        console.error("Error during login fetch:", error);
+        signinMessage.textContent =
+          error.message || "Network error. Please try again.";
+        signinMessage.className = "message-container error";
+      })
+      .finally(() => {
+        // restore button state
+        if (submitBtn) {
+          submitBtn.disabled = false;
+        }
+        if (btnText) {
+          btnText.style.display = "";
+        }
+        if (btnSpinner) {
+          btnSpinner.style.display = "none";
+        }
+      });
+  }, 50);
 });
 
 // Password Toggle Functionality for Login
@@ -2141,9 +2173,9 @@ function createReservationCard(reservation) {
            </div>`
         : statusText === "Confirmed"
         ? `<div class="reservation-actions">
-             <div class="reservation-notice">
+              <div class="reservation-notice">
                <i class="fa fa-info-circle"></i>
-               <span>Table assigned. Contact manager to cancel: +123-456-7890</span>
+               <span>Table assigned. For Cancel mail to : savore.2006@gmail.com</span>
              </div>
            </div>`
         : ""

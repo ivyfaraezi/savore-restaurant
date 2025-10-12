@@ -58,7 +58,12 @@ if (isset($_SESSION['customer_id'])) {
           <label for="remember-me">Remember Me</label>
         </div>
         <div class="form-actions">
-          <button type="submit">Login</button>
+          <button type="submit" id="signin-submit-btn">
+            <span class="btn-text" style="align-items:center;display:flex;">Login</span>
+            <span class="btn-spinner" style="display:none;align-items:center;">
+              <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+            </span>
+          </button>
           <a href="" id="forgot-password-link">Forgot Password?</a>
           <a href="" id="sign-up-link">Don't have an account? Sign Up</a>
         </div>
