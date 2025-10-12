@@ -103,7 +103,7 @@ The project emphasizes user experience with responsive design, real-time updates
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Client Browser                       │
-│         (HTML/CSS/JavaScript - Responsive UI)                  │
+│         (HTML/CSS/JavaScript - Responsive UI)           │
 └──────────────────────┬──────────────────────────────────┘
                        │
                        ↓
