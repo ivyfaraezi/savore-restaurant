@@ -19,6 +19,7 @@ A comprehensive full-stack restaurant management system built with PHP, MySQL an
 - [Project Structure](#project-structure)
 - [Database Configuration](#database-configuration)
 - [API Documentation](#api-documentation)
+- [Security Features](#security-features)
 - [Contributing](#contributing)
 - [License](#license)
 - [Credits](#credits)
@@ -30,11 +31,11 @@ A comprehensive full-stack restaurant management system built with PHP, MySQL an
 
 **Savoré Restaurant Management System** is a modern, feature-rich web application designed to streamline restaurant operations. The system provides three distinct user interfaces:
 
-- **Customer Portal**: Browse menu, place orders, reserve tables and leave reviews
-- **Employee Dashboard**: Manage orders, handle table reservations and process bills
-- **Admin Panel**: Complete control over menu items, employees, customers and analytics
+- **Customer Portal**: Browse menu, place orders, reserve tables, and leave reviews
+- **Employee Dashboard**: Manage orders, handle table reservations, and process bills
+- **Admin Panel**: Complete control over menu items, employees, customers, and analytics
 
-The project emphasizes user experience with responsive design, real-time updates and secure authentication mechanisms including OTP-based email verification.
+The project emphasizes user experience with responsive design, real-time updates, and secure authentication mechanisms including OTP-based email verification and automatic login security notifications that alert users of sign-in activity with device details.
 
 ---
 
@@ -43,6 +44,7 @@ The project emphasizes user experience with responsive design, real-time updates
 ### 👥 Customer Features
 
 - **User Authentication**: Secure login/registration with email OTP verification
+- **Login Security Notifications**: Automatic email alerts on each sign-in with device IP, browser details, and timestamp
 - **Password Recovery**: Forgot password functionality with email-based token reset
 - **Menu Browsing**: Filter and search through categorized menu items
 - **Shopping Cart**: Add items to cart with quantity management
@@ -79,7 +81,7 @@ The project emphasizes user experience with responsive design, real-time updates
 
 - **PHP 7.4+**: Server-side scripting
 - **MySQL 8.0+**: Relational database management
-- **PHPMailer**: Email functionality for OTP and notifications
+- **PHPMailer**: Email functionality for OTP, security notifications, and order confirmations
 - **Composer**: Dependency management
 
 ### Frontend
@@ -258,9 +260,16 @@ CREATE TABLE `reviews` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```
 
-#### 4. Configure Email Settings (Optional but Recommended)
+#### 4. Configure Email Settings (Required for Full Functionality)
 
-Edit email configuration files for OTP and notification functionality:
+Email configuration is essential for:
+
+- **OTP verification** during customer registration
+- **Security notifications** on each customer sign-in
+- **Order confirmations** for customers
+- **Password reset** functionality
+
+Edit email configuration files:
 
 **For Customer Portal**: `customer/config/email_config.php`
 **For Employee Portal**: `employee/config/email_service.php`
@@ -275,7 +284,7 @@ $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Port = 587;
 ```
 
-> **Note**: For Gmail, you need to generate an [App Password](https://support.google.com/accounts/answer/185833)
+> **Note**: For Gmail, you need to generate an [App Password](https://support.google.com/accounts/answer/185833). Without email configuration, registration, login security notifications and password recovery features will not work.
 
 #### 5. Update Database Configuration
 
@@ -325,7 +334,13 @@ runner.bat
    - Verify your email with the OTP sent to your inbox
    - Login with your credentials
 
-2. **Browse & Order**:
+2. **Secure Sign-In**:
+
+   - Upon successful login, receive an instant security notification email
+   - Email includes: IP address, browser/device info and sign-in timestamp
+   - Monitor unauthorized access attempts to your account
+
+3. **Browse & Order**:
 
    - Navigate to the Menu section
    - Filter by category or search for items
@@ -333,14 +348,14 @@ runner.bat
    - Review cart and proceed to checkout
    - Receive order confirmation via email
 
-3. **Reserve a Table**:
+4. **Reserve a Table**:
 
    - Click "Reserve Table" (requires login)
    - Select date, time and number of guests
    - Choose table number
    - Submit reservation
 
-4. **Leave a Review**:
+5. **Leave a Review**:
    - Scroll to Reviews section
    - Rate with stars (1-5)
    - Write your feedback
@@ -480,14 +495,67 @@ savore-restaurant/
 
 ### Authentication Endpoints
 
-| Endpoint                           | Method | Description               |
-| ---------------------------------- | ------ | ------------------------- |
-| `/auth/login.php`                  | POST   | User login                |
-| `/auth/send_otp.php`               | POST   | Send OTP for registration |
-| `/auth/verify_otp.php`             | POST   | Verify OTP code           |
-| `/auth/forgot_password.php`        | POST   | Request password reset    |
-| `/auth/verify_reset_token.php`     | GET    | Verify reset token        |
-| `/auth/process_password_reset.php` | POST   | Reset password            |
+| Endpoint                           | Method | Description                                   |
+| ---------------------------------- | ------ | --------------------------------------------- |
+| `/auth/login.php`                  | POST   | User login (with security notification email) |
+| `/auth/send_otp.php`               | POST   | Send OTP for registration                     |
+| `/auth/verify_otp.php`             | POST   | Verify OTP code                               |
+| `/auth/forgot_password.php`        | POST   | Request password reset                        |
+| `/auth/verify_reset_token.php`     | GET    | Verify reset token                            |
+| `/auth/process_password_reset.php` | POST   | Reset password                                |
+
+---
+
+## 🔒 Security Features
+
+Savoré Restaurant Management System implements multiple security layers:
+
+### Login Security Notifications
+
+Every time a customer signs in, an automated security notification is sent to their registered email address containing:
+
+- **IP Address**: The device's IP address used for login
+- **Timestamp**: Exact date and time of the sign-in
+- **Browser & Device Info**: Detailed information about the browser and operating system
+- **Full User Agent String**: Complete technical details for verification
+
+**Supported Detection**:
+
+- Browser: Chrome, Firefox, Safari, Edge, Opera
+- Operating Systems: Windows 10/8/7, macOS, iOS, Android, Linux
+- IP Address extraction from various proxy headers
+
+This feature helps users:
+
+- Monitor account activity in real-time
+- Detect unauthorized access attempts
+- Verify legitimate sign-ins from multiple devices
+- Take immediate action if suspicious activity is detected
+
+**Example Email Content**:
+
+```
+Hi [Customer Name],
+
+We noticed a sign-in to your Savoré account. If this was you,
+there's nothing to do. If you don't recognize this activity,
+please secure your account immediately.
+
+IP address:       192.168.1.100
+Time:             2025-10-12 14:30:45
+Device / Browser: Chrome on Windows 10
+
+If you need help, contact our support at savore.2006@gmail.com
+```
+
+### Additional Security Measures
+
+- Password hashing with PHP's `password_hash()` function
+- Session management with secure cookies
+- Email verification via OTP before account activation
+- SQL injection protection using prepared statements
+- XSS protection with input sanitization
+- HTTPS ready for production deployment
 
 ---
 
@@ -573,11 +641,15 @@ Planned features for future releases:
 - [ ] Multi-language support
 - [ ] Advanced analytics dashboard
 - [ ] Loyalty program integration
-- [ ] SMS notifications
+- [ ] SMS notifications for orders and reservations
+- [ ] Two-factor authentication (2FA)
+- [ ] Geolocation-based security alerts
 - [ ] Dark mode theme
 - [ ] Delivery tracking system
 - [ ] Customer feedback analysis with AI
 - [ ] Integration with third-party delivery services
+- [ ] Session management dashboard for users
+- [ ] Login history and device management
 
 ---
 
