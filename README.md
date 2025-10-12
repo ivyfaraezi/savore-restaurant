@@ -115,7 +115,7 @@ The project emphasizes user experience with responsive design, real-time updates
 │  └─────────────┴──────────────┴──────────────────┘      │
 │              │              │             │             │
 │              └──────────────┴─────────────┘             │
-│                             ↓                            │
+│                             ↓                           │
 │                   ┌──────────────┐                      │
 │                   │   REST APIs  │                      │
 │                   └──────────────┘                      │
