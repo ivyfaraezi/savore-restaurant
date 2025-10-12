@@ -312,7 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 } 
 $reservations = array();
-$result = $conn->query("SELECT * FROM tables ORDER BY id");
+$result = $conn->query("SELECT * FROM tables ORDER BY id DESC");
 if ($result) {
     while ($row = $result->fetch_assoc()) {
         $reservations[] = $row;

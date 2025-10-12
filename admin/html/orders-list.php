@@ -1,8 +1,8 @@
 <?php
 require_once '../config/database.php';
-$sql_orders = "SELECT id, name, email, mobile, items, quantities, total, statuss FROM orders ORDER BY id ";
+$sql_orders = "SELECT id, name, email, mobile, items, quantities, total, statuss FROM orders ORDER BY id DESC";
 $result_orders = $conn->query($sql_orders);
-$sql_tables = "SELECT id, name, email, mobile, datee, times, guests, tableno FROM tables ORDER BY id ";
+$sql_tables = "SELECT id, name, email, mobile, datee, times, guests, tableno FROM tables ORDER BY id DESC";
 $result_tables = $conn->query($sql_tables);
 ?>
 <!DOCTYPE html>

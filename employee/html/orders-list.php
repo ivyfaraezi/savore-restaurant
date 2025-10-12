@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$sql = "SELECT id, name, email, mobile, items, quantities, total, statuss FROM orders ORDER BY id ";
+$sql = "SELECT id, name, email, mobile, items, quantities, total, statuss FROM orders ORDER BY id DESC";
 $result = $conn->query($sql);
 ?>
 <!DOCTYPE html>

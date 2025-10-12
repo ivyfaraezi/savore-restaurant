@@ -254,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </thead>
                     <tbody>
                         <?php
-                        $result = $conn->query("SELECT * FROM menu ORDER BY id ");
+                        $result = $conn->query("SELECT * FROM menu ORDER BY id DESC");
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 echo "<tr>";

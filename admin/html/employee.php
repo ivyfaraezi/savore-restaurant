@@ -241,7 +241,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 }
-$employees_result = $conn->query("SELECT * FROM employee ORDER BY id");
+$employees_result = $conn->query("SELECT * FROM employee ORDER BY id DESC");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -300,7 +300,7 @@ $employees_result = $conn->query("SELECT * FROM employee ORDER BY id");
                     <option value="barista" <?php echo ($editMode && $employeeData && $employeeData['position'] == 'barista') || (isset($_POST['position']) && $_POST['position'] == 'barista') ? 'selected' : ''; ?>>Barista</option>
                 </select>
                 <div class="field-error"><?php echo isset($errors['position']) ? htmlspecialchars($errors['position']) : ''; ?></div>
-                <input type="number" name="mobile" placeholder="Mobile Number"
+                <input type="text" name="mobile" placeholder="Mobile Number"
                     value="<?php echo $editMode && $employeeData ? htmlspecialchars($employeeData['mobile']) : (isset($_POST['mobile']) ? htmlspecialchars($_POST['mobile']) : ''); ?>">
                 <div class="field-error"><?php echo isset($errors['mobile']) ? htmlspecialchars($errors['mobile']) : ''; ?></div>
                 <select name="gender" id="gender">
