@@ -140,7 +140,7 @@ class EmailService
         $html .= '
                                 <tr class="total-row">
                                     <td colspan="2"><strong>Total:</strong></td>
-                                    <td><strong>$' . number_format($totalAmount, 2) . '</strong></td>
+                                    <td><strong>৳' . number_format($totalAmount, 2) . '</strong></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -166,7 +166,7 @@ class EmailService
                 
                 <div class="footer">
                     <p>© 2025 Savoré Restaurant. All rights reserved.</p>
-                    <p>123 Savoré Street, Dhaka, Bangladesh | Phone: +880-1992346336 , +880-1857048383</p>
+                    <p>123 Savoré Street, Dhaka, Bangladesh | Contact : +880-1992346336 , +880-1857048383</p>
                     <p><strong>Email:</strong> savore.2006@gmail.com</p>
                 </div>
             </div>
@@ -200,8 +200,8 @@ class EmailService
         $text .= "Status: " . $orderDetails['status'] . "\n\n";
         $text .= $this->getStatusTextMessage($orderDetails['status']) . "\n\n";
         $text .= "If you have any questions about your order, please contact us at:\n";
-        $text .= "Phone: +880-1234-567890\n";
-        $text .= "Email: info@savore-restaurant.com\n\n";
+        $text .= "Mobile: +880-1992346336 , +880-1857048383 \n";
+        $text .= "Email: savore.2006@gmail.com\n\n";
         $text .= "Thank you for choosing Savoré Restaurant!\n";
         $text .= "© 2025 Savoré Restaurant. All rights reserved.";
 
@@ -243,7 +243,7 @@ class EmailService
                             <li>Your order is being prepared by our skilled chefs</li>
                             <li>You\'ll receive updates on your order status</li>
                             <li>Estimated preparation time: 25-35 minutes</li>
-                            <li>For any questions, contact us at +123-456-7890</li>
+                            <li>For any questions, contact us at +880-1992346336 , +880-1857048383</li>
                         </ul>';
             case 'confirmed':
                 return '
