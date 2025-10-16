@@ -1,3 +1,10 @@
+// Ensure order-sidebar is hidden on page load
+document.addEventListener("DOMContentLoaded", function () {
+  var orderSidebar = document.getElementById("order-sidebar");
+  if (orderSidebar) {
+    orderSidebar.style.display = "none";
+  }
+});
 let menuItems = [];
 // Format Price to Taka
 function formatPriceToTaka(price) {
@@ -2260,13 +2267,14 @@ function checkLoginStatusAndShowSidebar() {
   const signinBtn = document.querySelector(".signin-btn");
   const floatingBtn = document.getElementById("floating-orders-btn");
 
+  // Only show the floating button if logged in, but do NOT open the sidebar automatically
   if (
     userIcon &&
     userIcon.style.display === "inline-block" &&
     signinBtn &&
     signinBtn.style.display === "none"
   ) {
-    showOrderSidebar();
+    hideOrderSidebar(); // Ensure sidebar is closed
     if (floatingBtn) {
       floatingBtn.style.display = "flex";
     }
