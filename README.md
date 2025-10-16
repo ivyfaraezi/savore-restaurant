@@ -184,101 +184,120 @@ composer install
    - Create a new database named `savoredb`
    - Set collation to `utf8mb4_general_ci`
 
-3. **Create Database Tables**: Execute the following SQL commands:
+3. **Create Database Tables**:
 
-```sql
--- Customers Table
-CREATE TABLE `customers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL UNIQUE,
-  `mobile` varchar(15) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   You have two options to set up the database tables:
 
--- Employees Table
-CREATE TABLE `employee` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL UNIQUE,
-  `mobile` varchar(15) NOT NULL,
-  `designation` varchar(50) NOT NULL,
-  `salary` decimal(10,2) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   **Option 1: Import the Provided SQL File (Recommended)**
 
--- Menu Table
-CREATE TABLE `menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `type` varchar(50) NOT NULL,
-  `price` decimal(10,2) NOT NULL,
-  `photo` varchar(255) NOT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   - In phpMyAdmin, select the `savoredb` database you just created.
+   - Click on the **Import** tab.
+   - Click **Choose File** and select the `savoredb.sql` file located in the project root directory.
+   - Click **Go** to import all tables and data automatically.
+   - This will set up all required tables and initial data for the project.
 
--- Orders Table
-CREATE TABLE `orders` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `mobile` varchar(15) NOT NULL,
-  `items` text NOT NULL,
-  `quantities` int(11) NOT NULL,
-  `total` decimal(10,2) NOT NULL,
-  `statuss` varchar(20) DEFAULT 'Pending',
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   **Option 2: Manually Execute SQL Commands**
 
--- Tables (Reservations) Table
-CREATE TABLE `tables` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
-  `mobile` varchar(15) NOT NULL,
-  `datee` date NOT NULL,
-  `times` time NOT NULL,
-  `guests` int(11) NOT NULL,
-  `tableno` varchar(10) NOT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   Copy and run the following SQL commands in phpMyAdmin's SQL tab:
 
--- Reviews Table
-CREATE TABLE `reviews` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `stars` int(1) NOT NULL CHECK (`stars` >= 1 AND `stars` <= 5),
-  `message` text NOT NULL,
-  `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   ```sql
+   -- Customers Table
+   CREATE TABLE `customers` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(100) NOT NULL,
+      `email` varchar(100) NOT NULL UNIQUE,
+      `mobile` varchar(15) NOT NULL,
+      `password` varchar(255) NOT NULL,
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Messages Table (Contact Form)
-CREATE TABLE `messages` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `name` VARCHAR(255) NOT NULL,
-  `email` VARCHAR(255) NOT NULL,
-  `phone` VARCHAR(20),
-  `subject` VARCHAR(500),
-  `message` TEXT NOT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+   -- Employees Table
+   CREATE TABLE `employee` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(100) NOT NULL,
+      `email` varchar(100) NOT NULL UNIQUE,
+      `mobile` varchar(15) NOT NULL,
+      `designation` varchar(50) NOT NULL,
+      `salary` decimal(10,2) NOT NULL,
+      `password` varchar(255) NOT NULL,
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Login Table (Admin/Employee Authentication)
-CREATE TABLE `login` (
-  `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `username` VARCHAR(50) NOT NULL UNIQUE,
-  `password_hash` VARCHAR(255) NOT NULL,
-  `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-```
+   -- Menu Table
+   CREATE TABLE `menu` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(100) NOT NULL,
+      `type` varchar(50) NOT NULL,
+      `price` decimal(10,2) NOT NULL,
+      `photo` varchar(255) NOT NULL,
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+   -- Orders Table
+   CREATE TABLE `orders` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(100) NOT NULL,
+      `email` varchar(100) NOT NULL,
+      `mobile` varchar(15) NOT NULL,
+      `items` text NOT NULL,
+      `quantities` int(11) NOT NULL,
+      `total` decimal(10,2) NOT NULL,
+      `statuss` varchar(20) DEFAULT 'Pending',
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+   -- Tables (Reservations) Table
+   CREATE TABLE `tables` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(100) NOT NULL,
+      `email` varchar(100) NOT NULL,
+      `mobile` varchar(15) NOT NULL,
+      `datee` date NOT NULL,
+      `times` time NOT NULL,
+      `guests` int(11) NOT NULL,
+      `tableno` varchar(10) NOT NULL,
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+   -- Reviews Table
+   CREATE TABLE `reviews` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(100) NOT NULL,
+      `stars` int(1) NOT NULL CHECK (`stars` >= 1 AND `stars` <= 5),
+      `message` text NOT NULL,
+      `created_at` timestamp DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (`id`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+   -- Messages Table (Contact Form)
+   CREATE TABLE `messages` (
+      `id` INT AUTO_INCREMENT PRIMARY KEY,
+      `name` VARCHAR(255) NOT NULL,
+      `email` VARCHAR(255) NOT NULL,
+      `phone` VARCHAR(20),
+      `subject` VARCHAR(500),
+      `message` TEXT NOT NULL,
+      `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+   -- Login Table (Admin/Employee Authentication)
+   CREATE TABLE `login` (
+      `id` INT AUTO_INCREMENT PRIMARY KEY,
+      `username` VARCHAR(50) NOT NULL UNIQUE,
+      `password_hash` VARCHAR(255) NOT NULL,
+      `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+   -- Insert default admin and employee credentials
+   INSERT INTO `login` (`username`, `password_hash`) VALUES
+      ('adm-48558', '22-48558-3'),
+      ('emp-48608', '22-48608-3');
+   ```
 
 #### 4. Configure Email Settings (Required for Full Functionality)
 
@@ -324,16 +343,6 @@ $dbname = "savoredb";
 ```
 
 #### 6. Start the Application
-
-**Option 1**: Using the included batch file (Windows):
-
-```bash
-# Double-click runner.bat in the project root
-# Or run from command line:
-runner.bat
-```
-
-**Option 2**: Manual start:
 
 1. Ensure Apache is running in XAMPP
 2. Open browser and navigate to:
@@ -391,7 +400,8 @@ runner.bat
 ### For Employees
 
 1. **Login**: Access employee dashboard at `/employee/index.php`
-   - Use username format: `emp-[number]` (e.g., emp-123)
+   - Use username: `emp-48608`
+   - USe password: `22-48608-3`
    - Credentials stored in `login` table
 2. **Dashboard**: View analytics and recent activities
 3. **Manage Orders**:
@@ -405,7 +415,8 @@ runner.bat
 ### For Administrators
 
 1. **Login**: Access admin panel at `/admin/index.php`
-   - Use username format: `adm-[number]` (e.g., adm-001)
+   - Use username: `adm-48558`
+   - USe password: `22-48558-3`
    - Credentials stored in `login` table
 2. **Dashboard**: Monitor overall statistics with visual charts
 3. **Manage Menu**:
@@ -482,8 +493,7 @@ savore-restaurant/
 │   └── vendor/                # Composer dependencies
 │
 ├── LICENSE                    # Apache 2.0 License
-├── README.md                  # This file
-└── runner.bat                 # Quick start script (Windows)
+└── README.md                  # This file
 ```
 
 ---
