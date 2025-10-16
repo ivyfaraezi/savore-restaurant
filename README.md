@@ -1,8 +1,14 @@
 # 🍽️ Savoré Restaurant Management System
 
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=fff)](https://developer.mozilla.org/docs/Web/HTML)
+[![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3&logoColor=fff)](https://developer.mozilla.org/docs/Web/CSS)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=000)](https://developer.mozilla.org/docs/Web/JavaScript)
 [![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-777BB4?logo=php)](https://www.php.net/)
 [![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?logo=mysql)](https://www.mysql.com/)
+[![PHPMailer](https://img.shields.io/badge/PHPMailer-6.8.0-3c7a54?logo=php&logoColor=fff)](https://github.com/PHPMailer/PHPMailer)
+[![JSON](https://img.shields.io/badge/JSON-000?logo=json&logoColor=fff)](https://www.json.org/json-en.html)
+[![API](https://img.shields.io/badge/API-REST%20API-ff9800?logo=api&logoColor=fff)](#api-documentation)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 A comprehensive full-stack restaurant management system built with PHP, MySQL and vanilla JavaScript. Savoré offers a complete solution for managing restaurant operations including online ordering, table reservations, employee management and administrative controls.
 
